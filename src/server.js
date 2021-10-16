@@ -1,6 +1,5 @@
 import Environment from "./config/environments";
 import Express from "./config/express-middleware";
-import DBConection from "./config/db/connection";
 
 let serverInstace = null;
 const config = Environment.config;
