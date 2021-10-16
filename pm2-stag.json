@@ -17,6 +17,14 @@
       "env_production": {
         "NODE_ENV": "production",
         "PORT": 6810,
+        "CLUSTER_NAME": "mainnet",
+        "CLUSTER": "https://api.mainnet-beta.solana.com",
+        "API_PATH": "https://api-stg.solareum.app",
+        "CROSS_COMMUNICATION_KEY": "-",
+        "REWARD_AIRDROP": 1,
+        "REWARD_REF": 1,
+        "XSB_TOKEN_ADDRESS": "4UuGQgkD3rSeoXatXRWwRfRd21G87d5LiCfkVzNNv1Tt",
+        "XSB_ACCOUNT": "DpG4yXVJw1CPwg6dYidiMs83tuckA98Bh3r9qdmheBQx",
         "HOST_PATH": "api-stg.solareum.app"
       }
     }

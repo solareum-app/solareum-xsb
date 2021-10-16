@@ -1,5 +1,8 @@
+import dotenv from "dotenv";
 import Environment from "./config/environments";
 import Express from "./config/express-middleware";
+
+dotenv.config();
 
 let serverInstace = null;
 const config = Environment.config;

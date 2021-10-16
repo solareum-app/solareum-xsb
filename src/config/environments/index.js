@@ -4,7 +4,8 @@ import Test from "./test";
 import dotenv from "dotenv";
 import path from "path";
 
-console.info(process.env["NODE_ENV"]);
+dotenv.config();
+console.info("NODE_ENV", process.env["NODE_ENV"]);
 process.env["NODE_ENV"] = process.env["NODE_ENV"] || "development";
 const ENV = process.env.NODE_ENV;
 let instance = null;
