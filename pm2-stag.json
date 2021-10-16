@@ -1,0 +1,24 @@
+{
+  "apps": [
+    {
+      "name": "stg-solareum-xsb",
+      "script": "./.build/server.js",
+      "exec_mode": "fork_mode",
+      "instances": 1,
+      "args": "start",
+      "watch": false,
+      "ignore_watch": [
+        "node_modules",
+        "log"
+      ],
+      "watch_options": {
+        "followSymlinks": false
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "PORT": 6810,
+        "HOST_PATH": "api-stg.solareum.app"
+      }
+    }
+  ]
+}
