@@ -2,6 +2,7 @@ import { apiResult } from "../../utils/apiResult";
 import { request } from "../../utils/request";
 import { transferXsbToken } from "../../protocols/xsb";
 import Environment from "../../config/environments";
+import { genLog, logRequest } from "../commons";
 
 const config = Environment.config;
 
@@ -11,49 +12,6 @@ const mintAccount = process.env.XSB_ACCOUNT;
 const rewardAirdrop = parseFloat(process.env.REWARD_AIRDROP);
 // airdrop to referer who introduce the app to others
 const rewardRef = parseFloat(process.env.REWARD_REF);
-
-const genLog = async (type, payload = {}) => {
-  const { solAddress, refAddress } = payload;
-
-  return await request({
-    method: "post",
-    path: "/airdrop-logs",
-    data: {
-      type,
-      payload,
-      sol_address: solAddress || "-",
-      ref_address: refAddress || "-",
-      created_at: Date.now(),
-    },
-  }).catch((error) => {
-    console.log("genLog", error);
-    return -1;
-  });
-};
-
-const logRequest = async (
-  solAddress,
-  value = 0,
-  type = "airdrop",
-  signature,
-  sendingAccount,
-  deviceId,
-  source
-) => {
-  return await request({
-    method: "post",
-    path: "/airdrops",
-    data: {
-      sol_address: solAddress,
-      value: value,
-      type,
-      signature,
-      sending_account: sendingAccount,
-      device_id: deviceId,
-      source,
-    },
-  });
-};
 
 const checkValidAddress = async (solAddress, deviceId, refAddress) => {
   if (!solAddress || !deviceId) return false;

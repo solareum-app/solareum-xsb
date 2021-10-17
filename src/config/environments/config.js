@@ -12,8 +12,15 @@ export default class Config {
     this.config.CLUSTER = process.env.CLUSTER;
     this.config.API_PATH = process.env.API_PATH;
     this.config.CROSS_COMMUNICATION_KEY = process.env.CROSS_COMMUNICATION_KEY;
-    this.config.REWARD_AIRDROP = process.env.REWARD_AIRDROP;
-    this.config.REWARD_REF = process.env.REWARD_REF;
+
+    this.config.REWARD_AIRDROP = parseFloat(process.env.REWARD_AIRDROP || "0");
+    this.config.REWARD_REF = parseFloat(process.env.REWARD_REF || "0");
+    this.config.REWARD_MISSION = parseFloat(process.env.REWARD_MISSION || "0");
+    this.config.MISSION_PER_DAY = parseInt(
+      process.env.MISSION_PER_DAY || "0",
+      10
+    );
+
     this.config.XSB_TOKEN_ADDRESS = process.env.XSB_TOKEN_ADDRESS;
     this.config.XSB_ACCOUNT = process.env.XSB_ACCOUNT;
     this.config.WALLET = process.env.WALLET;
