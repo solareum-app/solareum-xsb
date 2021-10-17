@@ -12,3 +12,4 @@ yarn-error.log
 coverage
 _deploy
 .build
+public/logs
