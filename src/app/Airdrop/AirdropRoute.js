@@ -3,6 +3,7 @@ import AirdropController from "./AirdropController";
 
 const router = Router();
 
-router.get("/check", AirdropController.check);
+router.post("/check", AirdropController.check);
+router.post("/get", AirdropController.get);
 
 export default router;

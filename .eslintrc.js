@@ -1,19 +1,24 @@
 module.exports = {
-  'env': {
-    'es6': true,
-    'node': true,
-    'mocha': true
+  env: {
+    browser: true,
+    commonjs: true,
+    jest: true,
+    es6: true,
   },
-  'extends': 'standard',
-  'globals': {
-    'Atomics': 'readonly',
-    'SharedArrayBuffer': 'readonly'
+  ecmaFeatures: {
+    modules: true,
+    spread: true,
+    restParams: true,
   },
-  'parserOptions': {
-    'ecmaVersion': 2018,
-    'sourceType': 'module'
+  extends: ["eslint:recommended"],
+  globals: {
+    process: "readonly",
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
   },
-  'rules': {
-    'semi': [1, 'always']
-  }
+  parserOptions: {
+    sourceType: "module",
+    ecmaVersion: 2018,
+  },
+  rules: {},
 };

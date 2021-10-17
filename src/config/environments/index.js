@@ -1,22 +1,25 @@
-import Developemnt from './development';
-import Production from './production';
-import Test from './test';
-import dotenv from 'dotenv';
-console.info(process.env['NODE_ENV']);
-process.env['NODE_ENV'] = process.env['NODE_ENV'] || 'development';
+import Developemnt from "./development";
+import Production from "./production";
+import Test from "./test";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config();
+console.info("NODE_ENV", process.env["NODE_ENV"]);
+process.env["NODE_ENV"] = process.env["NODE_ENV"] || "development";
 const ENV = process.env.NODE_ENV;
 let instance = null;
 
 class Environment {
-  constructor () {
+  constructor() {
     if (!instance) {
-      dotenv.config();
+      dotenv.config({ path: path.join(__dirname, "../../.env") });
       let config;
       switch (ENV) {
-        case 'production':
+        case "production":
           config = Production;
           break;
-        case 'test':
+        case "test":
           config = Test;
           break;
         default:
@@ -26,7 +29,7 @@ class Environment {
     }
   }
 
-  get config () {
+  get config() {
     return this.configVal;
   }
 }

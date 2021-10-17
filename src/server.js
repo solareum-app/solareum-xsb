@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
 import Environment from "./config/environments";
 import Express from "./config/express-middleware";
-import DBConection from "./config/db/connection";
+
+dotenv.config();
 
 let serverInstace = null;
 const config = Environment.config;
