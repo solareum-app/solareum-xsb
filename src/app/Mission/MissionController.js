@@ -67,20 +67,18 @@ class AirdropController {
           missionRewardError = error;
         });
 
-        if (missionRewardSignature) {
-          await logRequest(
-            solAddress,
-            config.REWARD_MISSION,
-            "mission",
-            missionRewardSignature,
-            config.XSB_ACCOUNT,
-            deviceId,
-            body
-          );
-        } else {
-          missionRewardError =
-            "Please create XSB account first before doing mission.";
-        }
+        await logRequest(
+          solAddress,
+          config.REWARD_MISSION,
+          "mission",
+          missionRewardSignature,
+          config.XSB_ACCOUNT,
+          deviceId,
+          {
+            ...body,
+            missionRewardError,
+          }
+        );
       } else {
         missionRewardError = `You have done ${config.MISSION_PER_DAY} missions today, plz try again tomorrow.`;
       }
