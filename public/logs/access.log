@@ -61,3 +61,6 @@
 ::1 - - [18/Oct/2021:14:21:52 +0000] "POST /api/v1/mission/check HTTP/1.1" 200 203 "-" "PostmanRuntime/7.28.4"
 ::1 - - [18/Oct/2021:14:21:59 +0000] "POST /api/v1/mission/check HTTP/1.1" 200 203 "-" "PostmanRuntime/7.28.4"
 ::1 - - [18/Oct/2021:14:22:10 +0000] "POST /api/v1/mission/check HTTP/1.1" 200 203 "-" "PostmanRuntime/7.28.4"
+::1 - - [19/Oct/2021:01:06:16 +0000] "POST /api/v1/mission/check HTTP/1.1" 200 203 "-" "PostmanRuntime/7.28.4"
+::1 - - [19/Oct/2021:01:06:21 +0000] "POST /api/v1/mission/check HTTP/1.1" 200 203 "-" "PostmanRuntime/7.28.4"
+::1 - - [19/Oct/2021:01:06:29 +0000] "POST /api/v1/mission/get HTTP/1.1" 200 311 "-" "PostmanRuntime/7.28.4"
