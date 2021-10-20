@@ -20,7 +20,8 @@ const checkMissionLeft = async (solAddress, deviceId) => {
     path: `/airdrops?device_id=${deviceId}&type=mission&created_at_gte=${last24h}`,
   });
 
-  return (
+  return Math.max(
+    0,
     config.MISSION_PER_DAY - Math.max(airdropList.length, deviceList.length)
   );
 };
