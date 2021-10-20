@@ -23,8 +23,8 @@
         "CROSS_COMMUNICATION_KEY": "-",
         "REWARD_AIRDROP": 1,
         "REWARD_REF": 1,
-        "REWARD_MISSION": 0.2,
-        "MISSION_PER_DAY": 10,
+        "REWARD_MISSION": 0.25,
+        "MISSION_PER_DAY": 5,
         "XSB_TOKEN_ADDRESS": "4UuGQgkD3rSeoXatXRWwRfRd21G87d5LiCfkVzNNv1Tt",
         "XSB_ACCOUNT": "DpG4yXVJw1CPwg6dYidiMs83tuckA98Bh3r9qdmheBQx",
         "HOST_PATH": "api-stg.solareum.app"
