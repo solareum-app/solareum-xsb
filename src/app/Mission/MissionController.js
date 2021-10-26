@@ -26,6 +26,18 @@ const checkMissionLeft = async (solAddress, deviceId) => {
   );
 };
 
+const getMissionError = (error) => {
+  if (!error) return "";
+
+  const e = typeof error === "string" ? error : JSON.stringify(error);
+
+  if (e === "{}") {
+    return "Server error, plz try again later!";
+  }
+
+  return e;
+};
+
 class AirdropController {
   async check(req, res) {
     const body = req.body;
@@ -92,7 +104,7 @@ class AirdropController {
       missionRewardSignature,
       missionReward: missionRewardSignature ? config.REWARD_MISSION : 0,
       missionPerDay: config.MISSION_PER_DAY,
-      missionRewardError,
+      missionRewardError: getMissionError(missionRewardError),
     });
   }
 }
