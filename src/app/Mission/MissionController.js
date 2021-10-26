@@ -27,7 +27,7 @@ const checkMissionLeft = async (solAddress, deviceId) => {
 };
 
 const getMissionError = (error) => {
-  if (!error) return null;
+  if (!error) return "";
 
   const e = typeof error === "string" ? error : JSON.stringify(error);
 
