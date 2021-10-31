@@ -85,3 +85,4 @@
 ::1 - - [31/Oct/2021:05:53:30 +0000] "POST /api/v1/wallet/new HTTP/1.1" 400 768 "-" "PostmanRuntime/7.28.4"
 ::1 - - [31/Oct/2021:05:53:56 +0000] "POST /api/v1/wallet/new HTTP/1.1" 400 768 "-" "PostmanRuntime/7.28.4"
 ::1 - - [31/Oct/2021:05:54:01 +0000] "POST /api/v1/wallet/update HTTP/1.1" 200 625 "-" "PostmanRuntime/7.28.4"
+::1 - - [31/Oct/2021:05:56:20 +0000] "POST /api/v1/purchase/submit HTTP/1.1" 200 141 "-" "PostmanRuntime/7.28.4"

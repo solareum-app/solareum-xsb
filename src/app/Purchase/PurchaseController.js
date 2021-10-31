@@ -13,8 +13,8 @@ class PurchaseController {
     console.log("check mission: solAddress, deviceId", solAddress, deviceId);
 
     return apiResult(res, 200, {
-      input: body,
       name: "purchase-submit",
+      input: body,
     });
   }
 }
