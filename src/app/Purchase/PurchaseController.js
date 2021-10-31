@@ -3,8 +3,8 @@ import Environment from "../../config/environments";
 
 const config = Environment.config;
 
-class DeviceController {
-  async register(req, res) {
+class PurchaseController {
+  async submit(req, res) {
     const body = req.body;
     const { solAddress, meta = {} } = body;
     const deviceId = meta.deviceId;
@@ -14,9 +14,9 @@ class DeviceController {
 
     return apiResult(res, 200, {
       input: body,
-      name: "device-register",
+      name: "purchase-submit",
     });
   }
 }
 
-export default new DeviceController();
+export default new PurchaseController();

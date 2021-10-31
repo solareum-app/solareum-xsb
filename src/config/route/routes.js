@@ -1,8 +1,14 @@
 import AirdropRoute from "../../app/Airdrop/AirdropRoute";
 import MissionRoute from "../../app/Mission/MissionRoute";
-import DeviceRoute from "../../app/Device/DeviceRoute";
+import WalletRoute from "../../app/Wallet/WalletRoute";
+import PurchaseRoute from "../../app/Purchase/PurchaseRoute";
 
 const Routes = [
+  {
+    url: "purchase",
+    route: PurchaseRoute,
+    gaurd: false,
+  },
   {
     url: "airdrop",
     route: AirdropRoute,
@@ -14,8 +20,8 @@ const Routes = [
     gaurd: false,
   },
   {
-    url: "device",
-    route: DeviceRoute,
+    url: "wallet",
+    route: WalletRoute,
     gaurd: false,
   },
 ];
