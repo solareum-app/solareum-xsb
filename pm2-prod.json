@@ -20,11 +20,11 @@
         "CLUSTER_NAME": "mainnet",
         "CLUSTER": "https://solana-api.projectserum.com",
         "API_PATH": "https://api.solareum.app",
-        "CROSS_COMMUNICATION_KEY": "-",
+        "CROSS_COMMUNICATION_KEY": "LznxOXinVHFVhYCXa3tWRGMeHCQvdxAV",
         "REWARD_AIRDROP": 0,
         "REWARD_REF": 0,
         "REWARD_MISSION": 0.25,
-        "MISSION_PER_DAY": 5,
+        "MISSION_PER_DAY": 1,
         "XSB_TOKEN_ADDRESS": "4UuGQgkD3rSeoXatXRWwRfRd21G87d5LiCfkVzNNv1Tt",
         "XSB_ACCOUNT": "DpG4yXVJw1CPwg6dYidiMs83tuckA98Bh3r9qdmheBQx",
         "HOST_PATH": "api.solareum.app"

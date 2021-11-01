@@ -1,10 +1,10 @@
-const axios = require('axios');
+const axios = require("axios");
 const API_PATH = process.env.API_PATH;
-const X_KEY = process.env.CROSS_COMMUNICATION_KEY || '';
+const X_KEY = process.env.CROSS_COMMUNICATION_KEY || "";
 
 export const request = (opts) => {
   const { path, method, data, ...newOpts } = opts;
-  const myMethod = (method || 'POST').toLowerCase();
+  const myMethod = (method || "POST").toLowerCase();
   const hostname = opts.hostname || API_PATH;
   const url = opts.url || `${hostname}${path}`;
 
@@ -12,24 +12,24 @@ export const request = (opts) => {
     ...newOpts,
     headers: {
       ...opts.headers,
-      'Content-Type': 'application/json',
-      'X-Cross-Communication-Key': X_KEY,
+      Token: X_KEY,
+      "Content-Type": "application/json",
     },
   };
 
-  if (myMethod === 'post' || myMethod === 'put' || myMethod === 'patch') {
+  if (myMethod === "post" || myMethod === "put" || myMethod === "patch") {
     // the order of params is matter
-    console.log('request', myMethod, url, data, myOpts);
+    console.log("request", myMethod, url, data, myOpts);
     return axios[myMethod](url, data, myOpts).then((resp) => {
-      console.log('result', resp.data);
+      console.log("result", resp.data);
       return resp.data;
     });
   }
 
   // the order of params is matter
-  console.log('request', myMethod, url, myOpts);
+  console.log("request", myMethod, url, myOpts);
   return axios[myMethod](url, myOpts).then((resp) => {
-    console.log('result', resp.data);
+    console.log("result", resp.data);
     return resp.data;
   });
 };

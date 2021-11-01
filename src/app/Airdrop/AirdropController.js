@@ -13,7 +13,7 @@ const rewardAirdrop = parseFloat(process.env.REWARD_AIRDROP);
 // airdrop to referer who introduce the app to others
 const rewardRef = parseFloat(process.env.REWARD_REF);
 
-const checkValidAddress = async (solAddress, deviceId, refAddress) => {
+const checkValidAddress = async (solAddress, deviceId) => {
   if (!solAddress || !deviceId) return false;
 
   try {
@@ -21,12 +21,6 @@ const checkValidAddress = async (solAddress, deviceId, refAddress) => {
       method: "get",
       path: `/airdrops?sol_address=${solAddress}&type=airdrop`,
     });
-    const refList = refAddress
-      ? await request({
-          method: "get",
-          path: `/airdrops?sol_address=${refAddress}&type=referral`,
-        })
-      : [];
     // since the airdrop is so big, so one device receive 1 airdrop
     // considider to disable this rules then
     const deviceList = await request({
@@ -34,9 +28,7 @@ const checkValidAddress = async (solAddress, deviceId, refAddress) => {
       path: `/airdrops?device_id=${deviceId}&type=airdrop`,
     });
 
-    return (
-      airdropList.length === 0 && deviceList.length === 0 && refList.length < 2
-    );
+    return airdropList.length === 0 && deviceList.length === 0;
   } catch {
     return false;
   }
@@ -52,7 +44,7 @@ class AirdropController {
     console.log("checkAirdrop: body", body);
     console.log("checkAirdrop: solAddress, deviceId", solAddress, deviceId);
 
-    const valid = await checkValidAddress(solAddress, deviceId, "");
+    const valid = await checkValidAddress(solAddress, deviceId);
 
     if (valid && rewardAirdrop !== 0) {
       return apiResult(res, 200, {
@@ -76,8 +68,18 @@ class AirdropController {
   async get(req, res) {
     const params = {};
     const body = req.body;
-    const { solAddress, refAddress, meta = {} } = body;
+    const { solAddress, meta = {} } = body;
     const deviceId = meta.deviceId;
+    let refAddress = "";
+
+    // ref address will be tracked from our database
+    const walletList = await request({
+      method: "get",
+      path: `/wallets?sol_address=${solAddress}`,
+    });
+    if (walletList.length) {
+      refAddress = walletList[0].nominated_by;
+    }
 
     console.log("airdrop: params", params);
     console.log("airdrop: body", body);
@@ -100,7 +102,7 @@ class AirdropController {
     }
 
     await genLog("airdrop", body);
-    const valid = await checkValidAddress(solAddress, deviceId, refAddress);
+    const valid = await checkValidAddress(solAddress, deviceId);
 
     if (solAddress === refAddress || !valid) {
       return apiResult(res, 400, {

@@ -1,5 +1,13 @@
 import { request } from "../utils/request";
 
+export const getError = (error) => {
+  if (typeof error === "string") {
+    return error;
+  }
+  delete error.config;
+  return error;
+};
+
 export const genLog = async (type, payload = {}) => {
   const { solAddress, refAddress } = payload;
 
