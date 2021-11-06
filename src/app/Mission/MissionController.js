@@ -38,6 +38,38 @@ const getMissionError = (error) => {
   return e;
 };
 
+// Transfer airdrop automatically
+const transferAirdrop = async (solAddress, amount, type) => {
+  let missionRewardError = "";
+  try {
+    const missionRewardSignature = await transferXsbToken(
+      solAddress,
+      amount
+    ).catch((error) => {
+      missionRewardError = error;
+    });
+
+    if (missionRewardSignature) {
+      await logRequest(
+        solAddress,
+        amount,
+        type,
+        missionRewardSignature,
+        config.XSB_ACCOUNT,
+        "system",
+        {
+          missionRewardError,
+        }
+      );
+    }
+
+    return 0;
+  } catch (err) {
+    console.log("transferAirdrop", err);
+    return -1;
+  }
+};
+
 class AirdropController {
   async check(req, res) {
     const body = req.body;
@@ -97,12 +129,14 @@ class AirdropController {
 
         // Update mission completed
         let walletItem = null;
+        let refAddress = null;
         const walletList = await request({
           method: "get",
           path: `/wallets?sol_address=${solAddress}`,
         });
         if (walletList.length) {
           walletItem = walletList[0];
+          refAddress = walletItem.nominated_by;
         }
         const missionCompleted = await request({
           method: "get",
@@ -115,6 +149,24 @@ class AirdropController {
             mission_completed: missionCompleted,
           },
         });
+
+        // Sending airdrop, ignore error
+        if (missionCompleted === "10" || missionCompleted === 10) {
+          await transferAirdrop(solAddress, config.AIRDROP_1, "air_1");
+          await transferAirdrop(refAddress, config.REF_1, "ref_1");
+        }
+        if (missionCompleted === "20" || missionCompleted === 20) {
+          await transferAirdrop(solAddress, config.AIRDROP_2, "air_2");
+          await transferAirdrop(refAddress, config.REF_2, "ref_2");
+        }
+        if (missionCompleted === "30" || missionCompleted === 30) {
+          await transferAirdrop(solAddress, config.AIRDROP_3, "air_3");
+          await transferAirdrop(refAddress, config.REF_3, "ref_3");
+        }
+        if (missionCompleted === "40" || missionCompleted === 40) {
+          await transferAirdrop(solAddress, config.AIRDROP_4, "air_4");
+          await transferAirdrop(refAddress, config.REF_4, "ref_4");
+        }
       } else {
         missionRewardError = `You have done ${config.MISSION_PER_DAY} missions today, plz try again tomorrow.`;
       }
