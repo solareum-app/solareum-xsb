@@ -80,18 +80,41 @@ class AirdropController {
           missionRewardError = error;
         });
 
-        await logRequest(
-          solAddress,
-          config.REWARD_MISSION,
-          "mission",
-          missionRewardSignature,
-          config.XSB_ACCOUNT,
-          deviceId,
-          {
-            ...body,
-            missionRewardError,
-          }
-        );
+        if (missionRewardSignature) {
+          await logRequest(
+            solAddress,
+            config.REWARD_MISSION,
+            "mission",
+            missionRewardSignature,
+            config.XSB_ACCOUNT,
+            deviceId,
+            {
+              ...body,
+              missionRewardError,
+            }
+          );
+        }
+
+        // Update mission completed
+        let walletItem = null;
+        const walletList = await request({
+          method: "get",
+          path: `/wallets?sol_address=${solAddress}`,
+        });
+        if (walletList.length) {
+          walletItem = walletList[0];
+        }
+        const missionCompleted = await request({
+          method: "get",
+          path: `/airdrops/count?sol_address=${solAddress}&type=mission`,
+        });
+        request({
+          method: "put",
+          path: `/wallets/${walletItem.id}`,
+          data: {
+            mission_completed: missionCompleted,
+          },
+        });
       } else {
         missionRewardError = `You have done ${config.MISSION_PER_DAY} missions today, plz try again tomorrow.`;
       }
