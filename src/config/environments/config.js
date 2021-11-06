@@ -21,6 +21,18 @@ export default class Config {
       10
     );
 
+    // Airdrop
+    this.config.AIRDROP_1 = parseFloat(process.env.AIRDROP_1 || "0");
+    this.config.AIRDROP_2 = parseFloat(process.env.AIRDROP_2 || "0");
+    this.config.AIRDROP_3 = parseFloat(process.env.AIRDROP_3 || "0");
+    this.config.AIRDROP_4 = parseFloat(process.env.AIRDROP_4 || "0");
+
+    // Ref
+    this.config.REF_1 = parseFloat(process.env.REF_1 || "0");
+    this.config.REF_2 = parseFloat(process.env.REF_2 || "0");
+    this.config.REF_3 = parseFloat(process.env.REF_3 || "0");
+    this.config.REF_4 = parseFloat(process.env.REF_4 || "0");
+
     this.config.XSB_TOKEN_ADDRESS = process.env.XSB_TOKEN_ADDRESS;
     this.config.XSB_ACCOUNT = process.env.XSB_ACCOUNT;
     this.config.WALLET = process.env.WALLET;
