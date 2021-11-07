@@ -138,9 +138,10 @@ class AirdropController {
           walletItem = walletList[0];
           refAddress = walletItem.nominated_by;
         }
+        // 1636074000000 = Friday, November 5, 2021 1:00:00 AM GTM
         const missionCompleted = await request({
           method: "get",
-          path: `/airdrops/count?sol_address=${solAddress}&type=mission`,
+          path: `/airdrops/count?sol_address=${solAddress}&type=mission&created_at_gte=1636074000000`,
         });
         request({
           method: "put",
