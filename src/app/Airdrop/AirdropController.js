@@ -104,7 +104,7 @@ class AirdropController {
     await genLog("airdrop", body);
     const valid = await checkValidAddress(solAddress, deviceId);
 
-    if (solAddress === refAddress || !valid) {
+    if (!valid) {
       return apiResult(res, 400, {
         status: -1,
         params,
@@ -149,23 +149,27 @@ class AirdropController {
       }
 
       if (rewardRef && rewardAirdropSignature) {
-        rewardRefSignature = await transferXsbToken(
-          refAddress,
-          rewardRef
-        ).catch((error) => {
-          rewardRefSignatureError = error;
-        });
-        // log the success airdrop
-        if (rewardRefSignature) {
-          logRef = await logRequest(
+        if (solAddress !== refAddress) {
+          rewardRefSignature = await transferXsbToken(
             refAddress,
-            rewardRef,
-            "referral",
-            rewardRefSignature,
-            mintAccount,
-            deviceId,
-            body
-          ).catch(() => null);
+            rewardRef
+          ).catch((error) => {
+            rewardRefSignatureError = error;
+          });
+          // log the success airdrop
+          if (rewardRefSignature) {
+            logRef = await logRequest(
+              refAddress,
+              rewardRef,
+              "referral",
+              rewardRefSignature,
+              mintAccount,
+              deviceId,
+              body
+            ).catch(() => null);
+          }
+        } else {
+          rewardRefSignature = "Ref address is not qualified.";
         }
       }
 

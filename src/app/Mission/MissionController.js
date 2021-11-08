@@ -172,7 +172,7 @@ class AirdropController {
         missionRewardError = `You have done ${config.MISSION_PER_DAY} missions today, plz try again tomorrow.`;
       }
     } catch (error) {
-      missionRewardError = error;
+      // ignore the error
     }
 
     return apiResult(res, 200, {
@@ -180,7 +180,9 @@ class AirdropController {
       missionRewardSignature,
       missionReward: missionRewardSignature ? config.REWARD_MISSION : 0,
       missionPerDay: config.MISSION_PER_DAY,
-      missionRewardError: getMissionError(missionRewardError),
+      missionRewardError: !missionRewardSignature
+        ? getMissionError(missionRewardError)
+        : "",
     });
   }
 }
