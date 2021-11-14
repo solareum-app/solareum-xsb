@@ -188,6 +188,8 @@ class PurchaseController {
               status: "completed",
               release_signature: releaseSignature,
               released_at: Date.now(),
+              b_qty: xsbAmount,
+              b_value: usdcAmount,
               release_note: {
                 usdcAmount,
                 xsbAmount,
