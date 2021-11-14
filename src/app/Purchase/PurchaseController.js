@@ -127,7 +127,7 @@ class PurchaseController {
       return apiResult(res, 400, {
         name: "purchase-submit",
         input: body,
-        error,
+        error: getError(error),
         status: -1,
       });
     }
@@ -188,6 +188,8 @@ class PurchaseController {
               status: "completed",
               release_signature: releaseSignature,
               released_at: Date.now(),
+              b_qty: xsbAmount,
+              b_value: usdcAmount,
               release_note: {
                 usdcAmount,
                 xsbAmount,
@@ -219,7 +221,7 @@ class PurchaseController {
       return apiResult(res, 400, {
         status: -1,
         name: "purchase-distribute",
-        error,
+        error: getError(error),
         input: body,
       });
     }
