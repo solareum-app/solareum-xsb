@@ -3,6 +3,7 @@ import { request } from "../../utils/request";
 import { transferXsbToken } from "../../protocols/xsb";
 import Environment from "../../config/environments";
 import { logRequest } from "../commons";
+import { getAccountBalance } from "../../protocols/spl/sys-account";
 
 const config = Environment.config;
 
@@ -27,12 +28,18 @@ const checkMissionLeft = async (solAddress, deviceId) => {
 };
 
 const getMissionError = (error) => {
-  if (!error) return "";
+  const defaultMessage = "Server error, plz try again later!";
+
+  if (!error) return defaultMessage;
+
+  if (error && error.message) {
+    return error.message;
+  }
 
   const e = typeof error === "string" ? error : JSON.stringify(error);
 
   if (e === "{}") {
-    return "Server error, plz try again later!";
+    return defaultMessage;
   }
 
   return e;
@@ -40,33 +47,28 @@ const getMissionError = (error) => {
 
 // Transfer airdrop automatically
 const transferAirdrop = async (solAddress, amount, type) => {
-  let missionRewardError = "";
-  try {
-    const missionRewardSignature = await transferXsbToken(
-      solAddress,
-      amount
-    ).catch((error) => {
-      missionRewardError = error;
-    });
+  if (!solAddress) {
+    return "";
+  }
 
-    if (missionRewardSignature) {
+  try {
+    const signature = await transferXsbToken(solAddress, amount);
+
+    if (signature) {
       await logRequest(
         solAddress,
         amount,
         type,
-        missionRewardSignature,
+        signature,
         config.XSB_ACCOUNT,
         "system",
-        {
-          missionRewardError,
-        }
+        {}
       );
     }
 
-    return 0;
+    return signature;
   } catch (err) {
-    console.log("transferAirdrop", err);
-    return -1;
+    throw err;
   }
 };
 
@@ -183,6 +185,94 @@ class AirdropController {
       missionRewardError: !missionRewardSignature
         ? getMissionError(missionRewardError)
         : "",
+    });
+  }
+
+  async distribute(req, res) {
+    const body = req.body;
+    const { solAddress, xsbAddress, meta = {} } = body;
+    const deviceId = meta.deviceId;
+
+    console.log("airdrop: body", body);
+    console.log(
+      "mission: solAddress, xsbAddress, deviceId",
+      solAddress,
+      xsbAddress,
+      deviceId
+    );
+
+    let balance = 0;
+    let missionReward = 0;
+    let missionRewardSignature = null;
+    let missionRewardError = null;
+
+    let referReward = 0;
+    let referSignature = null;
+    let referError = null;
+    let referAddress = null;
+
+    let systemError = null;
+
+    try {
+      const missionLeft = await checkMissionLeft(solAddress, deviceId);
+
+      if (missionLeft > 0) {
+        // Update mission completed
+        let walletItem = null;
+        const walletList = await request({
+          method: "get",
+          path: `/wallets?sol_address=${solAddress}`,
+        });
+
+        if (walletList.length) {
+          walletItem = walletList[0];
+          referAddress = walletItem.nominated_by;
+        }
+
+        balance = (await getAccountBalance(xsbAddress)) / Math.pow(10, 9);
+        missionReward = Math.round(balance * config.REWARD_RATE * 100) / 100;
+        referReward = Math.round(balance * config.REFER_RATE * 100) / 100;
+
+        missionRewardSignature = await transferAirdrop(
+          solAddress,
+          missionReward,
+          "air_1"
+        ).catch((err) => {
+          missionRewardError = err;
+        });
+
+        referSignature = await transferAirdrop(
+          referAddress,
+          referReward,
+          "ref_1"
+        ).catch((err) => {
+          referError = err;
+        });
+      } else {
+        systemError = `You have done ${config.MISSION_PER_DAY} missions today, plz try again tomorrow.`;
+      }
+    } catch (error) {
+      systemError = error;
+    }
+
+    return apiResult(res, 200, {
+      balance,
+      missionRewardSignature,
+      missionReward,
+      referSignature,
+      referReward,
+      referAddress,
+
+      rewardRate: config.REWARD_RATE,
+      referRate: config.REFER_RATE,
+
+      input: body,
+      missionPerDay: config.MISSION_PER_DAY,
+      missionRewardError: missionRewardError
+        ? getMissionError(missionRewardError)
+        : undefined,
+      referError: referError ? getMissionError(referError) : undefined,
+      systemError: systemError ? getMissionError(systemError) : undefined,
     });
   }
 }

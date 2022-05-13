@@ -1,4 +1,6 @@
 import { Connection, Account, PublicKey } from "@solana/web3.js";
+import { TOKEN_PROGRAM_ID } from "./lib/tokens/instructions";
+import { parseTokenAccountData } from "./lib/tokens/data";
 
 const CLUSTER = process.env.CLUSTER;
 
@@ -14,10 +16,14 @@ export const getConnection = () => {
   return connection;
 };
 
-export const getAccountInfo = async (address) => {
+export const getAccountBalance = async (address) => {
   const connection = getConnection();
   const publicKey = new PublicKey(address);
-  return await connection.getAccountInfo(publicKey);
+  const accountInfo = await connection.getAccountInfo(publicKey);
+  let { amount } = accountInfo.owner.equals(TOKEN_PROGRAM_ID)
+    ? parseTokenAccountData(accountInfo.data)
+    : {};
+  return amount || 0;
 };
 
 export const getBalance = async (address) => {
