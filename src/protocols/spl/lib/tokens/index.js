@@ -4,8 +4,8 @@ import {
   Transaction,
   TransactionInstruction,
   SYSVAR_RENT_PUBKEY,
-} from '@solana/web3.js';
-import { TokenInstructions } from '@project-serum/serum';
+} from "@solana/web3.js";
+import { TokenInstructions } from "@project-serum/serum";
 import {
   assertOwner,
   closeAccount,
@@ -15,13 +15,13 @@ import {
   mintTo,
   TOKEN_PROGRAM_ID,
   transfer,
-} from './instructions';
+} from "./instructions";
 import {
   ACCOUNT_LAYOUT,
   getOwnedAccountsFilters,
   MINT_LAYOUT,
   parseTokenAccountData,
-} from './data';
+} from "./data";
 
 export async function getOwnedTokenAccounts(connection, publicKey) {
   let filters = getOwnedAccountsFilters(publicKey);
@@ -37,7 +37,7 @@ export async function getOwnedTokenAccounts(connection, publicKey) {
         owner: new PublicKey(owner),
         lamports,
       },
-    }),
+    })
   );
 }
 
@@ -46,15 +46,15 @@ export async function signAndSendTransaction(
   transaction,
   wallet,
   signers,
-  skipPreflight = false,
+  skipPreflight = false
 ) {
   transaction.recentBlockhash = (
-    await connection.getRecentBlockhash('max')
+    await connection.getRecentBlockhash("max")
   ).blockhash;
   transaction.setSigners(
     // fee payed by the wallet owner
     wallet.publicKey,
-    ...signers.map((s) => s.publicKey),
+    ...signers.map((s) => s.publicKey)
   );
 
   if (signers.length > 0) {
@@ -65,7 +65,7 @@ export async function signAndSendTransaction(
   const rawTransaction = transaction.serialize();
   return await connection.sendRawTransaction(rawTransaction, {
     skipPreflight,
-    preflightCommitment: 'single',
+    preflightCommitment: "single",
   });
 }
 
@@ -75,7 +75,7 @@ export async function nativeTransfer(connection, wallet, destination, amount) {
       fromPubkey: wallet.publicKey,
       toPubkey: destination,
       lamports: amount,
-    }),
+    })
   );
   return await signAndSendTransaction(connection, tx, wallet, []);
 }
@@ -94,18 +94,18 @@ export async function createAndInitializeMint({
       fromPubkey: owner.publicKey,
       newAccountPubkey: mint.publicKey,
       lamports: await connection.getMinimumBalanceForRentExemption(
-        MINT_LAYOUT.span,
+        MINT_LAYOUT.span
       ),
       space: MINT_LAYOUT.span,
       programId: TOKEN_PROGRAM_ID,
-    }),
+    })
   );
   transaction.add(
     initializeMint({
       mint: mint.publicKey,
       decimals,
       mintAuthority: owner.publicKey,
-    }),
+    })
   );
   let signers = [mint];
   if (amount > 0) {
@@ -114,11 +114,11 @@ export async function createAndInitializeMint({
         fromPubkey: owner.publicKey,
         newAccountPubkey: initialAccount.publicKey,
         lamports: await connection.getMinimumBalanceForRentExemption(
-          ACCOUNT_LAYOUT.span,
+          ACCOUNT_LAYOUT.span
         ),
         space: ACCOUNT_LAYOUT.span,
         programId: TOKEN_PROGRAM_ID,
-      }),
+      })
     );
     signers.push(initialAccount);
     transaction.add(
@@ -126,7 +126,7 @@ export async function createAndInitializeMint({
         account: initialAccount.publicKey,
         mint: mint.publicKey,
         owner: owner.publicKey,
-      }),
+      })
     );
     transaction.add(
       mintTo({
@@ -134,7 +134,7 @@ export async function createAndInitializeMint({
         destination: initialAccount.publicKey,
         amount,
         mintAuthority: owner.publicKey,
-      }),
+      })
     );
   }
 
@@ -153,18 +153,18 @@ export async function createAndInitializeTokenAccount({
       fromPubkey: payer.publicKey,
       newAccountPubkey: newAccount.publicKey,
       lamports: await connection.getMinimumBalanceForRentExemption(
-        ACCOUNT_LAYOUT.span,
+        ACCOUNT_LAYOUT.span
       ),
       space: ACCOUNT_LAYOUT.span,
       programId: TOKEN_PROGRAM_ID,
-    }),
+    })
   );
   transaction.add(
     initializeAccount({
       account: newAccount.publicKey,
       mint: mintPublicKey,
       owner: payer.publicKey,
-    }),
+    })
   );
 
   let signers = [newAccount];
@@ -179,7 +179,7 @@ export async function createAssociatedTokenAccount({
   const [ix, address] = await createAssociatedTokenAccountIx(
     wallet.publicKey,
     wallet.publicKey,
-    splTokenMintAddress,
+    splTokenMintAddress
   );
   const tx = new Transaction();
   tx.add(ix);
@@ -191,13 +191,13 @@ export async function createAssociatedTokenAccount({
 async function createAssociatedTokenAccountIx(
   fundingAddress,
   walletAddress,
-  splTokenMintAddress,
+  splTokenMintAddress
 ) {
   const associatedTokenAddress = await findAssociatedTokenAddress(
     walletAddress,
-    splTokenMintAddress,
+    splTokenMintAddress
   );
-  const systemProgramId = new PublicKey('11111111111111111111111111111111');
+  const systemProgramId = new PublicKey("11111111111111111111111111111111");
   const keys = [
     {
       pubkey: fundingAddress,
@@ -245,7 +245,7 @@ async function createAssociatedTokenAccountIx(
 
 export async function findAssociatedTokenAddress(
   walletAddress,
-  tokenMintAddress,
+  tokenMintAddress
 ) {
   return (
     await PublicKey.findProgramAddress(
@@ -254,13 +254,13 @@ export async function findAssociatedTokenAddress(
         TokenInstructions.TOKEN_PROGRAM_ID.toBuffer(),
         tokenMintAddress.toBuffer(),
       ],
-      ASSOCIATED_TOKEN_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID
     )
   )[0];
 }
 
 export const ASSOCIATED_TOKEN_PROGRAM_ID = new PublicKey(
-  'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+  "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
 );
 
 export async function transferTokens({
@@ -274,7 +274,7 @@ export async function transferTokens({
   overrideDestinationCheck,
 }) {
   const destinationAccountInfo = await connection.getAccountInfo(
-    destinationPublicKey,
+    destinationPublicKey
   );
   if (
     !!destinationAccountInfo &&
@@ -290,12 +290,13 @@ export async function transferTokens({
     });
   }
 
-  if (
-    (!destinationAccountInfo || destinationAccountInfo.lamports === 0) &&
-    !overrideDestinationCheck
-  ) {
-    throw new Error('Cannot send to address with zero SOL balances');
-  }
+  // if (
+  //   (!destinationAccountInfo || destinationAccountInfo.lamports === 0) &&
+  //   !overrideDestinationCheck
+  // ) {
+  //   throw new Error("Cannot send to address with zero SOL balances");
+  // }
+
   const destinationSplTokenAccount = (
     await getOwnedTokenAccounts(connection, destinationPublicKey)
   )
@@ -348,7 +349,7 @@ export async function transferAndClose({
       source: sourcePublicKey,
       destination: owner.publicKey,
       owner: owner.publicKey,
-    }),
+    })
   );
   let signers = [];
   return await signAndSendTransaction(connection, tx, owner, signers);
@@ -367,7 +368,7 @@ function createTransferBetweenSplTokenAccountsInstruction({
       destination: destinationPublicKey,
       owner: ownerPublicKey,
       amount,
-    }),
+    })
   );
   if (memo) {
     transaction.add(memoInstruction(memo));
@@ -407,14 +408,14 @@ async function createAndTransferToAccount({
     await createAssociatedTokenAccountIx(
       owner.publicKey,
       destinationPublicKey,
-      mint,
+      mint
     );
   let transaction = new Transaction();
   transaction.add(
     assertOwner({
       account: destinationPublicKey,
       owner: SystemProgram.programId,
-    }),
+    })
   );
   transaction.add(createAccountInstruction);
   const transferBetweenAccountsTxn =
@@ -441,7 +442,7 @@ export async function closeTokenAccount({
       source: sourcePublicKey,
       destination: owner.publicKey,
       owner: owner.publicKey,
-    }),
+    })
   );
   let signers = [];
   return await signAndSendTransaction(
@@ -449,6 +450,6 @@ export async function closeTokenAccount({
     transaction,
     owner,
     signers,
-    skipPreflight,
+    skipPreflight
   );
 }

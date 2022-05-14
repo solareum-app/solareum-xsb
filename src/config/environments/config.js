@@ -33,6 +33,9 @@ export default class Config {
     this.config.REF_3 = parseFloat(process.env.REF_3 || "0");
     this.config.REF_4 = parseFloat(process.env.REF_4 || "0");
 
+    this.config.REWARD_RATE = parseFloat(process.env.REWARD_RATE || "0");
+    this.config.REFER_RATE = parseFloat(process.env.REFER_RATE || "0");
+
     this.config.XSB_TOKEN_ADDRESS = process.env.XSB_TOKEN_ADDRESS;
     this.config.XSB_ACCOUNT = process.env.XSB_ACCOUNT;
     this.config.WALLET = process.env.WALLET;
