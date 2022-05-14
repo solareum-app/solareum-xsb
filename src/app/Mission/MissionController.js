@@ -203,8 +203,8 @@ class AirdropController {
 
     let balance = 0;
     let missionReward = 0;
-    let missionRewardSignature = null;
-    let missionRewardError = null;
+    let missionSignature = null;
+    let missionError = null;
 
     let referReward = 0;
     let referSignature = null;
@@ -212,10 +212,9 @@ class AirdropController {
     let referAddress = null;
 
     let systemError = null;
+    const missionLeft = await checkMissionLeft(solAddress, deviceId);
 
     try {
-      const missionLeft = await checkMissionLeft(solAddress, deviceId);
-
       if (missionLeft > 0) {
         // Update mission completed
         let walletItem = null;
@@ -233,12 +232,12 @@ class AirdropController {
         missionReward = Math.round(balance * config.REWARD_RATE * 100) / 100;
         referReward = Math.round(balance * config.REFER_RATE * 100) / 100;
 
-        missionRewardSignature = await transferAirdrop(
+        missionSignature = await transferAirdrop(
           solAddress,
           missionReward,
-          "air_1"
+          "mission"
         ).catch((err) => {
-          missionRewardError = err;
+          missionError = err;
         });
 
         referSignature = await transferAirdrop(
@@ -249,7 +248,7 @@ class AirdropController {
           referError = err;
         });
       } else {
-        systemError = `You have done ${config.MISSION_PER_DAY} missions today, plz try again tomorrow.`;
+        systemError = `You have done all missions today, plz try again tomorrow.`;
       }
     } catch (error) {
       systemError = error;
@@ -257,20 +256,20 @@ class AirdropController {
 
     return apiResult(res, 200, {
       balance,
-      missionRewardSignature,
+      missionSignature,
       missionReward,
+
       referSignature,
       referReward,
       referAddress,
 
       rewardRate: config.REWARD_RATE,
       referRate: config.REFER_RATE,
-
-      input: body,
       missionPerDay: config.MISSION_PER_DAY,
-      missionRewardError: missionRewardError
-        ? getMissionError(missionRewardError)
-        : undefined,
+      missionLeft: missionLeft === 0 ? missionLeft : missionLeft - 1,
+      input: body,
+
+      missionError: missionError ? getMissionError(missionError) : undefined,
       referError: referError ? getMissionError(referError) : undefined,
       systemError: systemError ? getMissionError(systemError) : undefined,
     });
