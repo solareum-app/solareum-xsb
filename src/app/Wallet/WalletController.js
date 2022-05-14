@@ -1,9 +1,6 @@
-import Environment from "../../config/environments";
 import { apiResult } from "../../utils/apiResult";
 import { request } from "../../utils/request";
 import { getError } from "../commons";
-
-const config = Environment.config;
 
 class WalletController {
   async new(req, res) {
@@ -12,6 +9,14 @@ class WalletController {
     const deviceId = meta.deviceId;
 
     console.log("register device: body", body);
+
+    if (solAddress === refAddress) {
+      return apiResult(res, 400, {
+        name: "wallet-new",
+        input: body,
+        error: "Your ref address is not valid",
+      });
+    }
 
     try {
       const wallet = await request({
