@@ -240,13 +240,16 @@ class AirdropController {
           missionError = err;
         });
 
-        referSignature = await transferAirdrop(
-          referAddress,
-          referReward,
-          "ref_1"
-        ).catch((err) => {
-          referError = err;
-        });
+        // only for valid refer address
+        if (referAddress.length === 44) {
+          referSignature = await transferAirdrop(
+            referAddress,
+            referReward,
+            "ref_1"
+          ).catch((err) => {
+            referError = err;
+          });
+        }
       } else {
         systemError = `You have done all missions today, plz try again tomorrow.`;
       }
