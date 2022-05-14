@@ -21,7 +21,7 @@
         "CLUSTER": "https://solana-api.projectserum.com",
         "API_PATH": "https://api-stg.solareum.app",
         "CROSS_COMMUNICATION_KEY": "eFw68VgALeDF5sXuaS8nmZktwu7Gw49N",
-        "REWARD_AIRDROP": 1,
+        "REWARD_AIRDROP": 10,
         "REWARD_REF": 1,
         "REWARD_MISSION": 0.1,
         "AIRDROP_1": 4,
