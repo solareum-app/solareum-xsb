@@ -241,7 +241,7 @@ class AirdropController {
         });
 
         // only for valid refer address
-        if (referAddress.length === 44) {
+        if (referAddress && referAddress.length === 44) {
           referSignature = await transferAirdrop(
             referAddress,
             referReward,
