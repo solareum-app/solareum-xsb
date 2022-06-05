@@ -14,7 +14,7 @@
     "lint:fix": "./node_modules/.bin/eslint src/** --fix",
     "lint:test:fix": "./node_modules/.bin/eslint test/** --fix",
     "docker:clean": "npm run clean:installDependencies",
-    "login": "ssh -i _deploy/goingsunny-sg.pem ec2-user@54.255.201.186",
+    "login": "ssh -i _deploy/goingsunny-sg.pem ec2-user@54.251.129.126",
     "deploy:prod": "npm run login 'cd prod/solareum-xsb && git reset --hard && git checkout master && git pull && yarn install && yarn run build:dev && pm2 startOrRestart pm2-prod.json --env production'",
     "deploy:stag": "npm run login 'cd stag/solareum-xsb && git reset --hard && git checkout develop && git pull && yarn install && yarn run build:dev && pm2 startOrRestart pm2-stag.json --env production'",
     "test": "npm run test:coverage:clean && cross-env NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/mocha/bin/mocha --require @babel/register test/**",
