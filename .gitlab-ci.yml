@@ -14,6 +14,7 @@ deploy_stag:
     - chmod 700 _deploy/goingsunny-sg.pem
     - ssh-keyscan -t rsa 18.136.118.58 >> ~/.ssh/known_hosts
     - ssh-keyscan -t rsa 54.255.201.186 >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa 54.251.129.126 >> ~/.ssh/known_hosts
   script:
     - npm run deploy:stag
   only:
@@ -30,6 +31,7 @@ deploy_prod:
     - chmod 700 _deploy/goingsunny-sg.pem
     - ssh-keyscan -t rsa 18.136.118.58 >> ~/.ssh/known_hosts
     - ssh-keyscan -t rsa 54.255.201.186 >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa 54.251.129.126 >> ~/.ssh/known_hosts
   script:
     - npm run deploy:prod
   only:
