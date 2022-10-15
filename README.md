@@ -11,3 +11,5 @@ npm run lint # lint using ESLint
 npm run lint:fix # lint:fix using ESLint default fixes
 npm start #start the application
 ```
+
+sudo nginx -s reload
