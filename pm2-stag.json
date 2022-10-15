@@ -18,7 +18,7 @@
         "NODE_ENV": "production",
         "PORT": 6810,
         "CLUSTER_NAME": "mainnet",
-        "CLUSTER": "https://api.mainnet-beta.solana.com",
+        "CLUSTER": "https://solana-api.projectserum.com",
         "API_PATH": "https://api-stg.solareum.app",
         "CROSS_COMMUNICATION_KEY": "eFw68VgALeDF5sXuaS8nmZktwu7Gw49N",
         "REWARD_AIRDROP": 10,
