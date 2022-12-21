@@ -4,6 +4,8 @@ import { transferXsbToken } from "../../protocols/xsb";
 import Environment from "../../config/environments";
 import { logRequest } from "../commons";
 import { getAccountBalance } from "../../protocols/spl/sys-account";
+import { getAssociatedTokenAddress } from "../../utils/getAssociatedTokenAddress";
+import { PublicKey } from "@solana/web3.js";
 
 const config = Environment.config;
 
@@ -190,8 +192,11 @@ class AirdropController {
 
   async distribute(req, res) {
     const body = req.body;
-    const { solAddress, xsbAddress, meta = {} } = body;
+    const { solAddress, meta = {} } = body;
     const deviceId = meta.deviceId;
+    const xsbAddress = (
+      await getAssociatedTokenAddress(new PublicKey(solAddress))
+    ).toBase58();
 
     console.log("airdrop: body", body);
     console.log(

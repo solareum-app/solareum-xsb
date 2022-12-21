@@ -1,22 +1,24 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
-import Logger from './logger';
-import Route from './route/route.index';
-import Routes from './route/routes';
-import swaggerUi from 'swagger-ui-express';
+import express from "express";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import jwt from "jsonwebtoken";
+import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
-const swaggerDocument = require(process.cwd() + '/public/docs/swagger.json');
-const parser = Symbol('parser');
-const logger = Symbol('logger');
-const router = Symbol('router');
-const validateToken = Symbol('validateToken');
-const swagger = Symbol('swagger');
+import Logger from "./logger";
+import Route from "./route/route.index";
+import Routes from "./route/routes";
+
+const swaggerDocument = require(process.cwd() + "/public/docs/swagger.json");
+const parser = Symbol("parser");
+const logger = Symbol("logger");
+const router = Symbol("router");
+const validateToken = Symbol("validateToken");
+const swagger = Symbol("swagger");
 let ExpressInstance = null;
 
 export default class Express {
-  constructor (config) {
+  constructor(config) {
     if (!ExpressInstance) {
       this.exApp = express();
       this[parser]();
@@ -25,27 +27,28 @@ export default class Express {
       this[swagger]();
       this.errorHandler();
       this.config = config;
-      ExpressInstance = 'Express';
+      ExpressInstance = "Express";
     }
   }
 
-  [parser] () {
+  [parser]() {
     this.exApp.use(cookieParser());
     this.exApp.use(bodyParser.urlencoded({ extended: true }));
     this.exApp.use(bodyParser.json());
+    this.exApp.use(cors({ origin: "*" }));
   }
 
-  [logger] () {
+  [logger]() {
     this.exApp.use(Logger.loggerMiddlerware);
     this.exApp.use(Logger.devLogger);
   }
 
-  [validateToken] (isAuthGuard = true) {
+  [validateToken](isAuthGuard = true) {
     let router = express.Router();
-    let errorMsg = { reason: 'UnAuthorized Access' };
+    let errorMsg = { reason: "UnAuthorized Access" };
     router.use((req, res, next) => {
       if (isAuthGuard) {
-        let token = req.headers['x-access-token'];
+        let token = req.headers["x-access-token"];
         if (!token) {
           res.status(403).send(errorMsg).end();
         } else {
@@ -65,29 +68,33 @@ export default class Express {
     return router;
   }
 
-  [router] () {
+  [router]() {
     const router = express.Router();
     Routes.every((route) => {
-      router.use(Route.getUrl(route.url), this[validateToken](route.gaurd), route.route);
+      router.use(
+        Route.getUrl(route.url),
+        this[validateToken](route.gaurd),
+        route.route
+      );
       return true;
     });
     this.exApp.use(Route.fullPath(), router);
   }
 
-  [swagger] () {
-    this.exApp.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {}));
+  [swagger]() {
+    this.exApp.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument, {}));
   }
 
-  errorHandler () {
-    process.on('uncaughtException', (err) => {
-      console.error('whoops! There was an uncaught error', err);
+  errorHandler() {
+    process.on("uncaughtException", (err) => {
+      console.error("whoops! There was an uncaught error", err);
       // do a graceful shutdown,
       // close the database connection etc.
       // process.exit(1);
     });
   }
 
-  get app () {
+  get app() {
     return this.exApp;
   }
 }
