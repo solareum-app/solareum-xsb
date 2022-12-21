@@ -308,3 +308,4 @@
 ::1 - - [21/Dec/2022:14:19:30 +0000] "POST /api/v1/mission/distribute HTTP/1.1" 200 329 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 ::1 - - [21/Dec/2022:14:20:42 +0000] "POST /api/v1/mission/distribute HTTP/1.1" 200 372 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 ::1 - - [21/Dec/2022:14:21:27 +0000] "POST /api/v1/mission/distribute HTTP/1.1" 200 372 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+::1 - - [21/Dec/2022:14:49:36 +0000] "POST /api/v1/mission/distribute HTTP/1.1" 200 346 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
