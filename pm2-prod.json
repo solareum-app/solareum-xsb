@@ -3,8 +3,8 @@
     {
       "name": "prd-solareum-xsb",
       "script": "./.build/server.js",
-      "exec_mode": "fork_mode",
-      "instances": 1,
+      "exec_mode": "cluster",
+      "instances": "max",
       "args": "start",
       "watch": false,
       "ignore_watch": [
