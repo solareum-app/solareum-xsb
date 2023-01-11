@@ -33,7 +33,7 @@
         "REF_3": 5.46875,
         "REF_4": 9.9375,
         "MISSION_PER_DAY": 1,
-        "REWARD_RATE": 0.1,
+        "REWARD_RATE": 0.00055,
         "REFER_RATE": 0.00015,
         "XSB_TOKEN_ADDRESS": "4UuGQgkD3rSeoXatXRWwRfRd21G87d5LiCfkVzNNv1Tt",
         "XSB_ACCOUNT": "DpG4yXVJw1CPwg6dYidiMs83tuckA98Bh3r9qdmheBQx",
